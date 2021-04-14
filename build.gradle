@@ -1,0 +1,139 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.4.RELEASE'
+		log4j2Version = '2.11.2'
+	}
+	repositories {
+  		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+// apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+apply plugin: 'war'
+war {
+    baseName 'portfolio-api'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs = ["-Xlint:unchecked", "-Xlint:deprecation", "-parameters"]
+}
+
+repositories {
+  		jcenter()
+		mavenCentral()
+		maven { url "https://code.lds.org/nexus/content/groups/main-repo"} 
+}
+
+
+repositories {
+    mavenCentral()
+    
+}
+
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web")
+	compile ("org.springframework.boot:spring-boot-starter-log4j2")	
+	compile('org.springframework.boot:spring-boot-starter-batch')
+	compile('org.springframework.boot:spring-boot-starter-webflux:2.1.4.RELEASE')
+	compile('org.projectreactor:reactor-spring:1.0.1.RELEASE')
+
+	compile('org.apache.tomcat.embed:tomcat-embed-jasper:8.5.23')
+	//compile('javax.servlet:jstl')
+
+	compile group: 'org.aspectj', name: 'aspectjrt', version: '1.7.3'
+	compile('org.springframework.boot:spring-boot-starter-aop')
+
+	// lombok
+	compile('org.projectlombok:lombok')
+	annotationProcessor ('org.projectlombok:lombok')
+	
+	// swagger
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
+
+	// apache common
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+	
+	// jwt
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
+	
+	// modelmapper
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.4'
+	
+	// db : mysql
+	compile 'mysql:mysql-connector-java'
+	// db : mariaDB
+	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.0'
+	compile('org.springframework.boot:spring-boot-starter-jdbc')
+
+	// mybatis
+	compile group: 'org.mybatis', name: 'mybatis-spring', version: '1.3.1'
+	compile group: 'org.mybatis', name: 'mybatis', version: '3.4.4'
+	compile group: 'org.jdom', name: 'jdom', version: '1.1'
+	
+	// hikariCP (db pool)
+	compile group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1'
+	
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.8'
+	compile group: 'org.apache.httpcomponents', name: 'httpasyncclient', version: '4.1.4'
+	
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.projectlombok:lombok')
+	
+	//YAMLFactory
+	compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.7.4')
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
+	
+	compile "com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17"
+	
+	//ojdbc
+	compile 'com.oracle:ojdbc6:11.2.0.3'
+	
+	//redis
+	compile ("org.springframework.boot:spring-boot-starter-data-redis")
+    compile('redis.clients:jedis')
+    compile group: 'io.lettuce', name: 'lettuce-core', version: '5.1.6.RELEASE'
+    
+    
+    //devtools
+	compile 'org.springframework.boot:spring-boot-devtools'
+	
+	//csv
+	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.11.2'
+}
+
+configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		exclude module: "logback-classic"
+	}
+}
+
+test {
+	systemProperty "java.net.preferIPv4Stack", "true"
+	outputs.dir snippetsDir
+	testLogging.showStandardStreams = true
+}
+
+task copyDependencies(type: Copy) {
+    into "$buildDir/dependencies"
+    from configurations.runtime
+}

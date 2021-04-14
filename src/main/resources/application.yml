@@ -1,0 +1,79 @@
+spring:
+  application.name: portfolio-api
+  ansi.enabled: DETECT
+  mvc:
+    view:
+       prefix: /WEB-INF/views/
+       suffix: .jsp
+    static-path-pattern: /resources/**
+
+redis:
+  mode: standalone  # standalone or sentinels or cluster
+  master: mymaster
+  db_num: 15  # local only (spring.profile=local)
+  password :
+  standalone:
+      host: localhost
+      port: 6379
+  sentinels:
+      host: 127.0.0.1, 127.0.0.2
+      port: 26381, 26382
+  cluster:
+      host: 127.0.0.1
+      port: 7000, 7001, 8001
+  timeout:
+      cmdSec : 10  #sec   
+
+jwt:
+  expTimeSec: 600
+  secKey: secsee
+  tokenKey: secsec
+
+jasypt.encryptor.bean: jasyptStringEncryptor
+    
+encKey: portfolio-api
+
+datasource: 
+  continue-on-error: true
+  smms:
+    pool-name: hikari-cp
+    allowPoolSuspension: true
+    autoCommit: false
+    cachePrepStmts: true
+    prepStmtCacheSize: 250
+    prepStmtCacheSqlLimit: 2048
+    useServerPrepStmts: true
+    connectionTimeout: 10000
+    validationTimeout: 5000
+    maxLifetime: 30000  
+    
+
+---
+
+spring.profiles: dev
+
+logging.config: classpath:log4j2-spring.dev.xml
+  
+---
+
+spring.profiles: prod
+
+logging.config: classpath:log4j2-spring.prod.xml
+  
+    
+---
+  
+spring.profiles: local
+jwt.dstrTokenKey: smms 
+agent:
+  id: agent_local 
+  
+server:
+  port: 38382
+  url:                                                #서버쪽 전송 URL
+    host: http://localhost                            #host : host #설치시 변경
+    port: 8181                                        #port : port #설치시 변경
+    
+logging.path: logs
+logging.config: classpath:log4j2-spring.local.xml
+  

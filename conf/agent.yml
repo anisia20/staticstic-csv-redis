@@ -1,0 +1,13 @@
+---
+# /bin/env.sh 의 PROCESS 값과 동일 하게 세팅 #설치시 변경 
+spring.profiles: local
+
+#테스트 기능 사용여부 : swaggerUI 노출
+test: true
+
+agent:
+  id: agent_local 
+  
+#로그디렉토리 기본경로:agent설치 경로 #설치시 변경
+logging.path: logs
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="INFO" >
+	<Properties>
+		<Property name="log-path">${sys:LOG_PATH:-logs}</Property>
+	</Properties>
+	<appenders>
+  		<Console name="console" >
+   			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%20.20t] %5p [%-30.30logger{2.}] (%-4L) : %m%n%wEx" />
+  		</Console>
+  		<RollingFile name="log_file" fileName="${log-path}/agent.log" filePattern="${log-path}/$${date:yyyyMMdd}/agent.log">
+   			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [${hostName}] [%20.20t] [%-30.30logger{2.}] (%-4L) : %m%n%wEx" />
+   			<Policies>
+    			<CronTriggeringPolicy schedule="0 0 0 * * ?" />
+   			</Policies>
+  		</RollingFile>
+  		<RollingFile name="error_file" fileName="${log-path}/error/agent.log" filePattern="${log-path}/error/$${date:yyyyMMdd}/agent.log">
+   			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [${hostName}] [%20.20t] [%-30.30logger{2.}] (%-4L) : %m%n%wEx" />
+   			<Policies>
+    			<CronTriggeringPolicy schedule="0 0 0 * * ?" />
+   			</Policies>
+  		</RollingFile>
+  	</appenders>
+
+	<loggers>
+  		<root level="info" >
+  			<appender-ref ref="console" />
+   			<appender-ref ref="log_file" />
+   			<appender-ref ref="error_file" level="error" />
+  		</root>
+
+		<logger name="org.apache" level="info" />
+  		<logger name="org.springframework" level="info" />
+  		<logger name="org.hibernate.validator" level="info" />
+  		<logger name="reactor.netty" level="info" />
+		<logger name="io.lettuce.core" level="info" />
+		
+		<logger name="api" level="info" />
+		
+		<logger name="org.iptime.glegend" level="debug" />
+		
+ 	</loggers>
+</configuration>
