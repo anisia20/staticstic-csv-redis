@@ -1,7 +1,8 @@
 **Sample program guide**
 
-1. SpringBoot, cdn vuejs, redis	
+1. SpringBoot, mvc, cdn type vuejs, redis	
 2. parse scouter csv
+3. jwt, swagger
 
 need local redis
 
